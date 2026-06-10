@@ -22,7 +22,7 @@ def get_available_whisper_models() -> list[str]:
     """Retrieves available Whisper models based on downloaded .bin files."""
     valid_models = ["base", "small", "medium", "large", "large-V3"]
     if not os.path.exists(WHISPER_MODEL_DIR):
-        return ["small"] # fallback default
+        return ["small"]
     try:
         model_files = [f for f in os.listdir(WHISPER_MODEL_DIR) if f.endswith(".bin")]
         whisper_models = [
@@ -78,26 +78,33 @@ def summarize_with_model(llm_model_name: str, context: str, text: str) -> str:
         raise Exception(f"Failed to summarize with model {llm_model_name}: {response.text}")
 
 def translate_and_summarize(
-    audio_file_path: str, context: str, whisper_model_name: str, llm_model_name: str
-) -> str:
-    """Processes audio through a selected Whisper model and generates a summary."""
+    audio_file_path: str, context: str, whisper_model_name: str, llm_model_name: str, translate: bool
+) -> tuple[str, str]:
+    """Processes audio and generates a summary and transcript file. Supports optional translation."""
     output_file = "output.txt"
     audio_file_wav = preprocess_audio_file(audio_file_path)
 
-    whisper_command = f'./whisper.cpp/main -m ./whisper.cpp/models/ggml-{whisper_model_name}.bin -f "{audio_file_wav}" > {output_file}'
+    # Use the -tr flag for translation to English if checkbox is ticked
+    tr_flag = "-tr " if translate else ""
+    whisper_command = f'./whisper.cpp/main -m ./whisper.cpp/models/ggml-{whisper_model_name}.bin {tr_flag}-f "{audio_file_wav}" > {output_file}'
     subprocess.run(whisper_command, shell=True, check=True)
 
     with open(output_file, "r") as f:
         transcript = f.read()
 
+    # Save transcript for download
+    transcript_file = "transcript.txt"
+    with open(transcript_file, "w", encoding="utf-8") as tf:
+        tf.write(transcript)
+
     summary = summarize_with_model(llm_model_name, context, transcript)
 
     os.remove(audio_file_wav)
     os.remove(output_file)
-    return summary
+    return summary, transcript_file
 
-def gradio_app(audio, context: str, whisper_model_name: str, llm_model_name: str) -> str:
-    return translate_and_summarize(audio, context, whisper_model_name, llm_model_name)
+def gradio_app(audio, context: str, whisper_model_name: str, llm_model_name: str, translate: bool) -> tuple[str, str]:
+    return translate_and_summarize(audio, context, whisper_model_name, llm_model_name, translate)
 
 if __name__ == "__main__":
     ollama_models = get_available_models()
@@ -121,9 +128,14 @@ if __name__ == "__main__":
                 label="Select a model for summarization",
                 value=ollama_models[0] if ollama_models else None,
             ),
+            gr.Checkbox(
+                label="Translate non-English audio to English",
+                value=False,
+            ),
         ],
         outputs=[
             gr.Textbox(label="Summary", show_copy_button=True),
+            gr.File(label="Download Transcript"),
         ],
         analytics_enabled=False,
         title="Meeting Summarizer",
