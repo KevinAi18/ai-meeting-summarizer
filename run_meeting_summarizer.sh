@@ -74,7 +74,7 @@ fi
 # Step 9: Run the Python script
 if [ -f "$PYTHON_SCRIPT" ]; then
     echo "Running the Python script..."
-    python "$PYTHON_SCRIPT" sample.wav
+    python "$PYTHON_SCRIPT"
 else
     echo "Python script '$PYTHON_SCRIPT' not found."
     exit 1
