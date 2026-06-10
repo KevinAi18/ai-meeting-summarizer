@@ -5,7 +5,7 @@ import requests
 import json
 
 OLLAMA_SERVER_URL = "http://localhost:11434"
-WHISPER_MODEL = "small"
+WHISPER_MODEL_DIR = "./whisper.cpp/models"
 
 def get_available_models() -> list[str]:
     """Retrieves a list of all available models from the Ollama server."""
@@ -17,6 +17,23 @@ def get_available_models() -> list[str]:
         return []
     except Exception:
         return []
+
+def get_available_whisper_models() -> list[str]:
+    """Retrieves available Whisper models based on downloaded .bin files."""
+    valid_models = ["base", "small", "medium", "large", "large-V3"]
+    if not os.path.exists(WHISPER_MODEL_DIR):
+        return ["small"] # fallback default
+    try:
+        model_files = [f for f in os.listdir(WHISPER_MODEL_DIR) if f.endswith(".bin")]
+        whisper_models = [
+            os.path.splitext(f)[0].replace("ggml-", "")
+            for f in model_files
+            if any(valid_model in f for valid_model in valid_models) and "test" not in f
+        ]
+        whisper_models = list(set(whisper_models))
+        return whisper_models if whisper_models else ["small"]
+    except Exception:
+        return ["small"]
 
 def preprocess_audio_file(audio_file_path: str) -> str:
     """Converts the input audio file to a WAV format with 16kHz sample rate and mono channel."""
@@ -60,12 +77,14 @@ def summarize_with_model(llm_model_name: str, context: str, text: str) -> str:
     else:
         raise Exception(f"Failed to summarize with model {llm_model_name}: {response.text}")
 
-def translate_and_summarize(audio_file_path: str, context: str, llm_model_name: str) -> str:
-    """Processes audio and generates a summary."""
+def translate_and_summarize(
+    audio_file_path: str, context: str, whisper_model_name: str, llm_model_name: str
+) -> str:
+    """Processes audio through a selected Whisper model and generates a summary."""
     output_file = "output.txt"
     audio_file_wav = preprocess_audio_file(audio_file_path)
 
-    whisper_command = f'./whisper.cpp/main -m ./whisper.cpp/models/ggml-{WHISPER_MODEL}.bin -f "{audio_file_wav}" > {output_file}'
+    whisper_command = f'./whisper.cpp/main -m ./whisper.cpp/models/ggml-{whisper_model_name}.bin -f "{audio_file_wav}" > {output_file}'
     subprocess.run(whisper_command, shell=True, check=True)
 
     with open(output_file, "r") as f:
@@ -77,11 +96,12 @@ def translate_and_summarize(audio_file_path: str, context: str, llm_model_name: 
     os.remove(output_file)
     return summary
 
-def gradio_app(audio, context: str, llm_model_name: str) -> str:
-    return translate_and_summarize(audio, context, llm_model_name)
+def gradio_app(audio, context: str, whisper_model_name: str, llm_model_name: str) -> str:
+    return translate_and_summarize(audio, context, whisper_model_name, llm_model_name)
 
 if __name__ == "__main__":
     ollama_models = get_available_models()
+    whisper_models = get_available_whisper_models()
     
     iface = gr.Interface(
         fn=gradio_app,
@@ -90,6 +110,11 @@ if __name__ == "__main__":
             gr.Textbox(
                 label="Context (optional)",
                 placeholder="Provide any additional context for the summary",
+            ),
+            gr.Dropdown(
+                choices=whisper_models,
+                label="Select a Whisper model for audio-to-text conversion",
+                value=whisper_models[0] if whisper_models else None,
             ),
             gr.Dropdown(
                 choices=ollama_models,
