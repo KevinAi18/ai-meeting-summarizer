@@ -19,3 +19,10 @@
 - Supports multiple languages and accents out of the box 
 - Large-v3 model gives best accuracy for meeting transcription 
 - Faster-Whisper library reduces transcription time by 4x 
+ 
+## 2026-06-22 
+### Sentiment Analysis on Meeting Transcripts 
+- Sentiment analysis detects tone of each speaker in meeting 
+- Positive sentiment linked to agreement and decision making 
+- Negative sentiment flags conflict or confusion in discussion 
+- VADER and FinBERT both tested for meeting sentiment scoring 
