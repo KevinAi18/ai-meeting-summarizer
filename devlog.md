@@ -26,3 +26,10 @@
 - Positive sentiment linked to agreement and decision making 
 - Negative sentiment flags conflict or confusion in discussion 
 - VADER and FinBERT both tested for meeting sentiment scoring 
+ 
+## 2026-06-24 
+### Multi Speaker Diarization Notes 
+- Diarization assigns spoken segments to individual speakers 
+- Pyannote audio library used for speaker diarization pipeline 
+- Speaker embeddings clustered to identify unique participants 
+- Diarization output merged with Whisper transcript for full log 
