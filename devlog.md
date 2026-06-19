@@ -33,3 +33,10 @@
 - Pyannote audio library used for speaker diarization pipeline 
 - Speaker embeddings clustered to identify unique participants 
 - Diarization output merged with Whisper transcript for full log 
+ 
+## 2026-06-26 
+### Meeting Topic Segmentation Notes 
+- Topic segmentation splits long transcript into distinct topics 
+- Sentence embeddings used to detect topic boundary shifts 
+- Each segment summarized separately for structured meeting notes 
+- Helps generate agenda style summary instead of single long block 
