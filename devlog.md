@@ -40,3 +40,10 @@
 - Sentence embeddings used to detect topic boundary shifts 
 - Each segment summarized separately for structured meeting notes 
 - Helps generate agenda style summary instead of single long block 
+ 
+## 2026-06-29 
+### Meeting Summary Output Formats Notes 
+- Structured output includes summary, action items and decisions 
+- JSON schema enforced using Pydantic for consistent API responses 
+- Email friendly format generated for sharing summary with team 
+- Notion and Slack export integrations planned for next iteration 
