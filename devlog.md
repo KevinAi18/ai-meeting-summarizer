@@ -47,3 +47,10 @@
 - JSON schema enforced using Pydantic for consistent API responses 
 - Email friendly format generated for sharing summary with team 
 - Notion and Slack export integrations planned for next iteration 
+ 
+## 2026-07-01 
+### Real Time Meeting Transcription Notes 
+- Streaming transcription processes audio in small chunks live 
+- WebSocket connection used to send audio chunks to backend 
+- Partial transcripts updated continuously during the meeting 
+- Final transcript reconciled after meeting ends for accuracy 
