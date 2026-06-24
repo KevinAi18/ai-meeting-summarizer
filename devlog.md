@@ -54,3 +54,10 @@
 - WebSocket connection used to send audio chunks to backend 
 - Partial transcripts updated continuously during the meeting 
 - Final transcript reconciled after meeting ends for accuracy 
+ 
+## 2026-07-03 
+### Meeting Type Classification Notes 
+- Meetings classified as standup, planning, retro or client call 
+- Classification helps select appropriate summary template format 
+- Few shot prompting used to classify meeting type from transcript 
+- Different templates highlight different sections per meeting type 
