@@ -61,3 +61,10 @@
 - Classification helps select appropriate summary template format 
 - Few shot prompting used to classify meeting type from transcript 
 - Different templates highlight different sections per meeting type 
+ 
+## 2026-07-05 
+### Calendar Integration Notes 
+- Google Calendar API used to auto detect upcoming meeting links 
+- Bot joins meeting automatically at scheduled start time 
+- Meeting title and attendees pulled from calendar event metadata 
+- Summary auto emailed to all attendees after meeting ends 
