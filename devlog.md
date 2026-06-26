@@ -68,3 +68,10 @@
 - Bot joins meeting automatically at scheduled start time 
 - Meeting title and attendees pulled from calendar event metadata 
 - Summary auto emailed to all attendees after meeting ends 
+ 
+## 2026-07-07 
+### Cross Meeting Search Notes 
+- All past meeting summaries indexed for semantic search 
+- Users can ask what was discussed about a topic across meetings 
+- Embeddings generated per meeting summary for retrieval 
+- Helps answer questions without manually rewatching recordings 
