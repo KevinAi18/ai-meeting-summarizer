@@ -75,3 +75,10 @@
 - Users can ask what was discussed about a topic across meetings 
 - Embeddings generated per meeting summary for retrieval 
 - Helps answer questions without manually rewatching recordings 
+ 
+## 2026-07-09 
+### Custom Vocabulary for Transcription Notes 
+- Domain specific terms often misrecognized by default Whisper model 
+- Custom vocabulary list improves accuracy on company and product names 
+- Prompt biasing technique passes expected terms to Whisper at inference 
+- Post processing correction step fixes remaining common mistakes 
