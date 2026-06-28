@@ -91,3 +91,12 @@ For production-grade local tools, Python's official Whisper library has several 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+ 
+## Output Includes 
+- Concise meeting summary 
+- List of action items with assigned owners where mentioned 
+- Key decisions made during the meeting 
+- Full transcript with speaker labels 
+ 
+## Why This Project 
+Built to reduce time spent writing meeting notes manually and to make it easy to search past discussions. 
