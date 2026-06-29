@@ -100,3 +100,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
  
 ## Why This Project 
 Built to reduce time spent writing meeting notes manually and to make it easy to search past discussions. 
+ 
+## Tech Stack 
+- Whisper for speech to text transcription 
+- Pyannote for speaker diarization 
+- LLM for summarization and action item extraction 
+- FastAPI backend with webhook support for calendar integration 
