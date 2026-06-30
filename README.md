@@ -106,3 +106,8 @@ Built to reduce time spent writing meeting notes manually and to make it easy to
 - Pyannote for speaker diarization 
 - LLM for summarization and action item extraction 
 - FastAPI backend with webhook support for calendar integration 
+ 
+## Roadmap 
+- Add Slack and Notion export integrations 
+- Support real time live transcription during calls 
+- Add multi language summarization support 
