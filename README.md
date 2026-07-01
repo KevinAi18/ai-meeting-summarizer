@@ -111,3 +111,9 @@ Built to reduce time spent writing meeting notes manually and to make it easy to
 - Add Slack and Notion export integrations 
 - Support real time live transcription during calls 
 - Add multi language summarization support 
+ 
+## Setup 
+1. Clone the repository 
+2. Install dependencies from requirements.txt 
+3. Add your OpenAI or Groq API key to .env file 
+4. Run the FastAPI server and open the Streamlit UI 
