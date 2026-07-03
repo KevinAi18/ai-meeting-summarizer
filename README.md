@@ -123,3 +123,9 @@ Built to reduce time spent writing meeting notes manually and to make it easy to
 - Speaker diarization adds roughly 30 seconds for 1 hour audio 
 - Summary generation takes under 10 seconds for typical meeting 
 - End to end pipeline processes 1 hour meeting in under 5 minutes 
+ 
+## License 
+This project is released under the MIT License. See the LICENSE file for details. 
+ 
+## Acknowledgements 
+Built using OpenAI Whisper for transcription and Pyannote for speaker diarization. 
