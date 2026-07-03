@@ -3,4 +3,9 @@
 transcript.txt
 /whisper.cpp
 .DS_Store
-temp_backup/
+temp_backup/__pycache__/ 
+*.pyc 
+.env 
+venv/ 
+*.log 
+audio_temp/ 
