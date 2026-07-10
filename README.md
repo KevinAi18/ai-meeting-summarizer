@@ -129,3 +129,7 @@ This project is released under the MIT License. See the LICENSE file for details
  
 ## Acknowledgements 
 Built using OpenAI Whisper for transcription and Pyannote for speaker diarization. 
+ 
+## FAQ 
+Q: Does this work with Zoom and Google Meet? 
+A: Yes, any platform where audio can be captured or recorded works. 
