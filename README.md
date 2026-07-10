@@ -43,6 +43,7 @@ The architecture is designed to be lightweight, modular, and fast.
 - **Multi-Model Support**: Select between Whisper models (`base`, `small`, `medium`, `large-V3`) and any LLM model installed in your local Ollama server (e.g., `llama3.2`, `mistral`, `gemma2`).
 - **Translation**: Built-in translation of non-English audio files directly to English transcripts.
 - **Export Capabilities**: Instantly download the raw transcript as a text file.
+- **Robust Error Handling**: Built-in safety checks for missing files, unbuilt binaries, and empty server response lists to ensure a crash-free experience.
 
 ---
 
