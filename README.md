@@ -133,3 +133,7 @@ Built using OpenAI Whisper for transcription and Pyannote for speaker diarizatio
 ## FAQ 
 Q: Does this work with Zoom and Google Meet? 
 A: Yes, any platform where audio can be captured or recorded works. 
+ 
+## Troubleshooting 
+- If transcription is inaccurate, try a larger Whisper model size 
+- If calendar sync fails, re-check your Google Calendar credentials 
