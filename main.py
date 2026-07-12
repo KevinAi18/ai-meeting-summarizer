@@ -81,29 +81,80 @@ def translate_and_summarize(
     audio_file_path: str, context: str, whisper_model_name: str, llm_model_name: str, translate: bool
 ) -> tuple[str, str]:
     """Processes audio and generates a summary and transcript file. Supports optional translation."""
+    if not audio_file_path:
+        raise gr.Error("Please upload an audio file first.")
+    
+    if not llm_model_name:
+        raise gr.Error("Please select a summarization model from Ollama.")
+    
+    whisper_bin = "./whisper.cpp/main"
+    if not os.path.exists(whisper_bin) and os.path.exists(whisper_bin + ".exe"):
+        whisper_bin = whisper_bin + ".exe"
+        
+    if not os.path.exists(whisper_bin):
+        raise gr.Error("whisper.cpp binary not found. Please run run_meeting_summarizer.sh first to build whisper.cpp.")
+        
+    model_path = f"./whisper.cpp/models/ggml-{whisper_model_name}.bin"
+    if not os.path.exists(model_path):
+        raise gr.Error(f"Whisper model file not found at {model_path}. Please download it first or run the setup script.")
+        
     output_file = "output.txt"
-    audio_file_wav = preprocess_audio_file(audio_file_path)
-
-    # Use the -tr flag for translation to English if checkbox is ticked
-    tr_flag = "-tr " if translate else ""
-    whisper_command = f'./whisper.cpp/main -m ./whisper.cpp/models/ggml-{whisper_model_name}.bin {tr_flag}-f "{audio_file_wav}" > {output_file}'
-    subprocess.run(whisper_command, shell=True, check=True)
-
-    with open(output_file, "r") as f:
-        transcript = f.read()
-
-    # Save transcript for download
-    transcript_file = "transcript.txt"
-    with open(transcript_file, "w", encoding="utf-8") as tf:
-        tf.write(transcript)
-
-    summary = summarize_with_model(llm_model_name, context, transcript)
-
-    os.remove(audio_file_wav)
-    os.remove(output_file)
-    return summary, transcript_file
+    audio_file_wav = None
+    
+    try:
+        try:
+            audio_file_wav = preprocess_audio_file(audio_file_path)
+        except subprocess.CalledProcessError as e:
+            raise gr.Error(f"Audio preprocessing (FFmpeg) failed. Please ensure FFmpeg is installed: {e}")
+            
+        # Use the -tr flag for translation to English if checkbox is ticked
+        tr_flag = "-tr " if translate else ""
+        whisper_command = f'{whisper_bin} -m {model_path} {tr_flag}-f "{audio_file_wav}" > {output_file}'
+        
+        try:
+            subprocess.run(whisper_command, shell=True, check=True)
+        except subprocess.CalledProcessError as e:
+            raise gr.Error(f"Whisper transcription failed: {e}")
+            
+        if not os.path.exists(output_file):
+            raise gr.Error("Whisper completed but the transcript output file was not created.")
+            
+        with open(output_file, "r", encoding="utf-8") as f:
+            transcript = f.read()
+            
+        # Save transcript for download
+        transcript_file = "transcript.txt"
+        with open(transcript_file, "w", encoding="utf-8") as tf:
+            tf.write(transcript)
+            
+        summary = summarize_with_model(llm_model_name, context, transcript)
+        return summary, transcript_file
+        
+    finally:
+        if audio_file_wav and os.path.exists(audio_file_wav):
+            try:
+                os.remove(audio_file_wav)
+            except Exception:
+                pass
+        if os.path.exists(output_file):
+            try:
+                os.remove(output_file)
+            except Exception:
+                pass
 
 def gradio_app(audio, context: str, whisper_model_name: str, llm_model_name: str, translate: bool) -> tuple[str, str]:
+    """Gradio handler function that wraps the translation and summarization pipeline.
+    
+    Args:
+        audio: File path to the uploaded audio.
+        context (str): Optional context textbox value.
+        whisper_model_name (str): Selected Whisper model from dropdown.
+        llm_model_name (str): Selected Ollama model from dropdown.
+        translate (bool): Checkbox state for translation flag.
+        
+    Returns:
+        tuple[str, str]: The generated summary and the path to the transcript download file.
+    """
     return translate_and_summarize(audio, context, whisper_model_name, llm_model_name, translate)
 
 if __name__ == "__main__":
