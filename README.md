@@ -139,3 +139,6 @@ A: Yes, any platform where audio can be captured or recorded works.
 ## Troubleshooting 
 - If transcription is inaccurate, try a larger Whisper model size 
 - If calendar sync fails, re-check your Google Calendar credentials 
+ 
+## Design Philosophy 
+Meeting notes are only valuable if someone actually reads them, so structured, scannable output is prioritized over exhaustive detail. 
