@@ -142,3 +142,6 @@ A: Yes, any platform where audio can be captured or recorded works.
  
 ## Design Philosophy 
 Meeting notes are only valuable if someone actually reads them, so structured, scannable output is prioritized over exhaustive detail. 
+ 
+## Related Projects 
+Check out other projects in this portfolio for RAG, fine-tuning, and computer vision work. 
