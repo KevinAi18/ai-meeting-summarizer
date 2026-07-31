@@ -18,3 +18,6 @@
  
 ## 2026-07-31 
 - Minor README and documentation polish 
+ 
+## 2026-08-02 
+- Minor README and documentation polish 
